@@ -3,8 +3,8 @@ import numpy as np
 import os
 from matplotlib import pyplot as plt
 
-SOURCE_PATCH = "test2"
-RESULT_PATH = "filtred2"
+SOURCE_PATCH = "test3"
+RESULT_PATH = "filtred3"
 
 def filter(name):
 	#name = '1'
@@ -31,7 +31,8 @@ def filter(name):
 			rgb = cv2.threshold(a,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)[1]#'''average'''
 		else:
 			state = 3
-			rgb = cv2.threshold(a,127,255,cv2.THRESH_BINARY_INV )[1] 
+			rgb = cv2.threshold(cv2.split(rgb)[2],227,255,cv2.THRESH_BINARY)[1] # Red chanel
+			rgb = cv2.bitwise_not(rgb)
 
 	print("State",state)
 	#fig = plt.hist(a.ravel(),256)	
@@ -46,7 +47,7 @@ def filter(name):
 	#rgb = cv2.cvtColor(rgb, cv2.COLOR_BGR2GRAY)
 
 	# Morphological transformation
-	kernel_opening = np.ones((2,2),np.uint8)
+	kernel_opening = np.ones((2,2),np.uint8) # 2
 
 	#x = y = np.arange(0, 10)
 	#cx = x.size / 2  

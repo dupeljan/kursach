@@ -1,7 +1,6 @@
 import sys
 import os
 import subprocess
-from pprint import pprint
 import random
 
 from fontTools.ttLib import TTFont
