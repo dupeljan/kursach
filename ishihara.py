@@ -6,7 +6,7 @@ import os
 from PIL import Image, ImageDraw
 
 SOURCE_PATCH = "fonts"
-RESULT_PATH = "test1"
+RESULT_PATH = "test2"
 GEN_COUNT = 1
 
 try:
@@ -21,7 +21,7 @@ TOTAL_CIRCLES = 1500
 
 color = lambda c: ((c >> 16) & 255, (c >> 8) & 255, c & 255)
 
-COLOR_THEAM = 3
+COLOR_THEAM = 2
 if COLOR_THEAM == 1:
     COLORS_ON = [
         color(0xF9BB82), color(0xEBA170), color(0xFCCD84)

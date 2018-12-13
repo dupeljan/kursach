@@ -1,33 +1,47 @@
 import cv2
 import numpy as np
 import os
+from matplotlib import pyplot as plt
 
-SOURCE_PATCH = "test1"
-RESULT_PATH = "filtred1"
+SOURCE_PATCH = "test2"
+RESULT_PATH = "filtred2"
 
 def filter(name):
 	#name = '1'
 	rgb = cv2.imread(os.path.join(SOURCE_PATCH,name+'.png'))
 
 	lab = cv2.cvtColor(rgb, cv2.COLOR_BGR2Lab)
-	local_max = max( abs(x[1])  for i in range(len(lab)) for x in lab[i]  )
-	average = np.array( list(x[1]  for i in range(len(lab)) for x in lab[i] )) .mean()
+	#local_max = max( abs(x[1])  for i in range(len(lab)) for x in lab[i]  )
+	average_a = np.array( list(x[1]  for i in range(len(lab)) for x in lab[i] )) .mean()
 
 	'''
 	If average more than 128 => number is green.
 	Otherwise is red
 	'''
-	print (average, name)
+	print ("A ",average_a,  name)
 	a = cv2.split(lab)[1]
-	if average < 130:
+	if average_a < 129:
 		rgb = cv2.threshold(a,132,255,cv2.THRESH_BINARY)[1]
-	elif 120 <= average < 134: #130 134
-		rgb = cv2.threshold(a,average,255,cv2.THRESH_BINARY)[1]
+		state = 1
 	else:
-		rgb = cv2.threshold(a,127,255,cv2.THRESH_BINARY_INV)[1]
+		average_b = np.array( list(x[2]  for i in range(len(lab)) for x in lab[i] )) .mean()
+		print("B ",average_b, name)
+		if  average_b < 135: #130 134
+			state = 2
+			rgb = cv2.threshold(a,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)[1]#'''average'''
+		else:
+			state = 3
+			rgb = cv2.threshold(a,127,255,cv2.THRESH_BINARY_INV )[1] 
 
-
+	print("State",state)
+	#fig = plt.hist(a.ravel(),256)	
+	#plt.savefig("hist"+name+".png")
+	
+	#l,a,b = cv2.split(lab)
+	#cv2.imwrite("L"+ name +".png",l)
 	#cv2.imwrite("A"+ name +".png",a)
+	#cv2.imwrite("B"+ name +".png",b)
+	
 	#cv2.imwrite("CVlab"+ name +".png",rgb)
 	#rgb = cv2.cvtColor(rgb, cv2.COLOR_BGR2GRAY)
 
@@ -36,7 +50,7 @@ def filter(name):
 
 	#x = y = np.arange(0, 10)
 	#cx = x.size / 2  
-	kernel_closing = np.ones((30, 30),np.uint8)
+	kernel_closing = np.ones((12, 12),np.uint8)#30
 	#mask = (x[np.newaxis,:] - cx)**2 + (y[:,np.newaxis] - cx)**2 < (x.size/2)**2
 	#print(mask)
 	#kernel_closing[mask] = 1

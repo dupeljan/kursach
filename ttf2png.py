@@ -7,8 +7,8 @@ import random
 from fontTools.ttLib import TTFont
 
 RESULT_PATH = "fonts"
-FONT_COUNT = 20
-BAD_FONTS = (b'Kacst',b'rsfs',b'lklug',b'esint',b'ani',b'cmex',b'msam')
+FONT_COUNT = 5
+BAD_FONTS = (b'cst',b'rsfs',b'lklug',b'esint',b'ani',b'cmex',b'msam')
 
 def gen_pics(TTF_PATH,FONT_SIZE = "500"):
 	TTF_NAME = os.path.splitext(os.path.basename(TTF_PATH))[0]
