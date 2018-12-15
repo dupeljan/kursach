@@ -3,8 +3,8 @@ import numpy as np
 import os
 from matplotlib import pyplot as plt
 
-SOURCE_PATCH = "noise test5"
-RESULT_PATH = "filtred5 noise"
+SOURCE_PATCH = "test6"
+RESULT_PATH = "filtred6"
 LOG_FILE = "errors " + SOURCE_PATCH
 
 
