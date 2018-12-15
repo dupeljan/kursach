@@ -1,22 +1,30 @@
 import cv2
 import numpy as np
-from random import random
+from random import randint
 import os
 
-SOURCE_PATCH = "test"
-RESULT_PATH = "noise test"
+SOURCE_PATCH = "test5"
+RESULT_PATH = "noise test5"
 
 def add_noise(name):
-	k = 35#20
-	img = cv2.imread(os.path.join(SOURCE_PATCH ,  name ))
+	k = 10#20
+	range_ = int(512/k)
+	img = cv2.imread(os.path.join(SOURCE_PATCH ,  name + ".png"))
 
 	for i in range(len(img)):
 		for j , x in enumerate(img[i]):
-			img[i][j] = x + x*[(random() - 0.5)/k if x[0] != 255 else 1,\
-							   (random() - 0.5)/k if x[1] != 255 else 1,\
-							   (random() - 0.5)/k if x[2] != 255 else 1]  		
-	cv2.imwrite(os.path.join(RESULT_PATH , name+" noisy"+".png"),img)
-
+			rand = [ int (randint(0,range_) - range_ / 2)  for i in range(3)]
+			for k in range(3):
+				sum_ = x[k] + rand[k] 
+				if sum_ <= 0:
+					rand[k] = 0
+				elif 0 < sum_ < 255:
+					rand[k] = sum_
+				else:
+					rand[k] = 255 
+			img[i][j] =  rand
+	cv2.imwrite(os.path.join(RESULT_PATH , name+".png"),img)
+	print ( name+".png" + " generated")
 def main():
 	if not os.path.isdir(RESULT_PATH):
 		os.mkdir(RESULT_PATH)
@@ -24,7 +32,7 @@ def main():
 	count = 0
 	for filename in files:
 		name,ext = os.path.splitext(filename)
-		if ext == "":
+		if ext == ".png":
 			add_noise(name)
 			count += 1
 			print("not more than " + str(len(files) - count) + " files left" )

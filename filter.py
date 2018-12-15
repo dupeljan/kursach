@@ -3,8 +3,10 @@ import numpy as np
 import os
 from matplotlib import pyplot as plt
 
-SOURCE_PATCH = "test3"
-RESULT_PATH = "filtred3"
+SOURCE_PATCH = "test5"
+RESULT_PATH = "filtred5"
+
+ERROR_COUNT = 0
 
 def filter(name):
 	#name = '1'
@@ -13,14 +15,14 @@ def filter(name):
 	lab = cv2.cvtColor(rgb, cv2.COLOR_BGR2Lab)
 	#local_max = max( abs(x[1])  for i in range(len(lab)) for x in lab[i]  )
 	average_a = np.array( list(x[1]  for i in range(len(lab)) for x in lab[i] )) .mean()
-
+	average_b = 0
 	'''
 	If average more than 128 => number is green.
 	Otherwise is red
 	'''
 	print ("A ",average_a,  name)
 	a = cv2.split(lab)[1]
-	if average_a < 129:
+	if average_a < 130:
 		rgb = cv2.threshold(a,132,255,cv2.THRESH_BINARY)[1]
 		state = 1
 	else:
@@ -35,6 +37,11 @@ def filter(name):
 			rgb = cv2.bitwise_not(rgb)
 
 	print("State",state)
+	if ( name[-1] != str(state)):
+		ERROR_COUNT += 1
+		file = open("error", 'a' )
+		file.write("a ",average_a," b ",average_b," "name)
+		file.close()
 	#fig = plt.hist(a.ravel(),256)	
 	#plt.savefig("hist"+name+".png")
 	

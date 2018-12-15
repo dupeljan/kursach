@@ -2,11 +2,12 @@ import math
 import random
 import sys
 import os
+import sys
 
 from PIL import Image, ImageDraw
 
 SOURCE_PATCH = "fonts"
-RESULT_PATH = "test4"
+RESULT_PATH = "test5"
 GEN_COUNT = 1
 
 try:
@@ -20,8 +21,14 @@ BACKGROUND = (255, 255, 255)
 TOTAL_CIRCLES = 1500
 
 color = lambda c: ((c >> 16) & 255, (c >> 8) & 255, c & 255)
+if sys.argv[1]:
+    COLOR_THEAM = int(sys.argv[1] ) % 5
+else: 
+    COLOR_THEAM = 1
 
-COLOR_THEAM = 4
+TYPE = COLOR_THEAM if COLOR_THEAM <= 3 else 3
+
+#   type 1
 if COLOR_THEAM == 1:
     COLORS_ON = [
         color(0xF9BB82), color(0xEBA170), color(0xFCCD84)
@@ -30,6 +37,8 @@ if COLOR_THEAM == 1:
         color(0x9CA594), color(0xACB4A5), color(0xBBB964),
         color(0xD7DAAA), color(0xE5D57D), color(0xD1D6AF)
     ]
+
+# type 2
 elif COLOR_THEAM == 2:
     COLORS_ON = [
         color(0xb6b87c), color(0xe3da73), color(0xb0ab60)
@@ -38,6 +47,7 @@ elif COLOR_THEAM == 2:
         color(0xef845a), color(0xffc68c), color(0xef845a),
     ]
 
+# type 3
 elif COLOR_THEAM == 3:
     COLORS_ON = [
         color(0xf79087), color(0xf26969), color(0xd8859d),\
@@ -46,6 +56,8 @@ elif COLOR_THEAM == 3:
     COLORS_OFF = [
         color(0x5a4e46), color(0x7b6b63), color(0x9c9c84),
     ]
+
+# type 3 too
 elif COLOR_THEAM == 4:
     COLORS_ON = [
         color(0xb6b87c), color(0xe3da73), color(0xb0ab60)
@@ -144,8 +156,9 @@ def gen_test(name,gen_n = 0):
     except (KeyboardInterrupt, SystemExit):
         pass
 
-    image2.save(os.path.join(RESULT_PATH , name + str(gen_n) + ".png") , "PNG")
-    print ("Generate " + name + str(gen_n) + ".png"+" succesfully" )
+    name =  name + "theme_" + str(COLOR_THEAM) + " type_" + str(TYPE) + ".png"
+    image2.save(os.path.join(RESULT_PATH , name ) , "PNG")
+    print ("Generate " + name +" succesfully" )
 
 def main():
     files = os.listdir(SOURCE_PATCH)
