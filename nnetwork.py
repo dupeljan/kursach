@@ -21,9 +21,10 @@ class Neural_network:
 		# Tensor of output all neurons
 		self.output = np.ndarray(shape= (len(layers_shape) , ) , dtype= list)
 		# Init weight
-		self.weights_list = list()
+		weights_list = list()
 		for i in range(len(layers_shape)-1):
-			self.weights_list.append( np.random.normal(0.0, pow(layers_shape[i], -0.5), (layers_shape[i], layers_shape[i+1])))
+			weights_list.append( np.random.normal(0.0, pow(layers_shape[i], -0.5), (layers_shape[i], layers_shape[i+1])))
+		self.weights_list = np.array(weights_list)
 
 	def sign(self,input):
 		return [ self.activation_function(x) for x in input ]
@@ -47,22 +48,21 @@ class Neural_network:
 		return self.get_output(y,i+1)
 
 	def lern(self,input,label):
-		output = self.get_output(input)
+		output = self.get_output(input) 
 		delta =  output[1:]
 		# DESCENT
 		# LAST LAYER
-		for i, x in enumerate(output[-1]):
-			delta[-1][i] = -2 * self.alpha * x * ( 1 - x ) * ( label[i] - x )
+		delta[-1] = -2 * self.alpha * output[-1] * np.array( 1.0 - x for x in output[-1] ) *( label - output[-1])
 		# HIDEN LAYERS
 		# REVERSE, BEGIN FROM SECOND FROM END
 		for i in range( len(output) - 2 , 0, -1) : # CHOOSE LAYER
+			#delta[i-1] = 2 * self.alpha * output[i] ( 1 - output[i] ) * sum ( delta[i][k] * self.weights_list[i][j] )
 			for j, x in enumerate(output[i]): # CHOOSE NEURON
 				delta[i-1][j] = 2 * self.alpha * x * ( 1 - x ) * sum ( delta[i][k] * self.weights_list[i][j][k] for k in range( len( delta[i] ) ) ) 
 		# UPDATE WEIGHTS
 		for layer in range(len(self.weights_list)): # CHOOSE LAYER
-			for i in range(len(self.weights_list[layer])): # CHOOSE ROW 
-				for j in range(len(self.weights_list[layer][i])): # CHOOSE COLUMN
-					self.weights_list[layer][i][j] -= self.speed * delta[layer][j] * output[layer][i] 
+			self.weights_list[layer] -= self.speed * np.dot(delta[layer],output[layer].T) 
+			
 
 
 
