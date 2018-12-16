@@ -24,15 +24,15 @@ def create_dataset():
 	
 def get_dataset(path= DATASET_PATH):
 	data = np.load(path)['set']
-	return ( data[0] , data[1] )
+	return ( np.stack(data[0],axis=0) , np.stack(data[1],axis=0) )
 
 
 def create_network():
 	#(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
 	images,labels = get_dataset()
+	print(images.shape)
 	train_images, test_images = images[:1200], images[1200:]
 	train_labels, test_labels = labels[:1200], labels[1200:]
-	print(train_images.shape)
 	network = models.Sequential()
 	network.add(layers.Dense(512, activation='relu', input_shape=(28 * 28,)))
 	network.add(layers.Dense(10, activation='softmax'))
