@@ -40,29 +40,25 @@ class Neural_network:
 			return self.output
 		return self.get_output(y,i+1)
 
-
-	
 	def lern(self,input,label):
 		output = self.get_output(input)
-		delta = np.ndarray(shape= (len(self.weights_list) , max(self.shape) ) , dtype= list)
+		delta = output.copy()
 		# DESCENT
 		# LAST LAYER
 		for i, x in enumerate(output[-1]):
 			delta[-1][i] = -2 * self.alpha * x * ( 1 - x ) * ( label[i] - x )
 		# HIDEN LAYERS
 		# REVERSE, BEGIN FROM SECOND FROM END
-		for i, local_out in enumerate(output[1::-1]): # CHOOSE LAYER
-			for j, x in enumerate(local_out): # CHOOSE NEURON
-
+		for i in range( len(output) - 2 , -1, -1) : # CHOOSE LAYER
+			for j, x in enumerate(output[i]): # CHOOSE NEURON
 				delta[i][j] = 2 * self.alpha * ( 1 - x ) * sum ( delta[i+1][k] * self.weights_list[i+1][j][k] for k in range( len( delta[i+1] ) ) ) 
 		# UPDATE WEIGHTS
-		for i in len(range(self.weights_list)): # CHOOSE LAYER
-			for j in len(range(self.weights_list[i])): # CHOOSE ROW 
-				for k in len(range(self.weights_list[i][j])): # CHOOSE COLUMN
-					weights_list[i][j][k] -= self.speed * delta[i][k] * output[i][j] 
-
-
-
+		print ( self.weights_list )
+		for layer in range(len(self.weights_list)): # CHOOSE LAYER
+			for i in range(len(self.weights_list[layer])): # CHOOSE ROW 
+				for j in range(len(self.weights_list[layer][i])): # CHOOSE COLUMN
+					print ( layer,i,j)
+					self.weights_list[layer][i][j] -= self.speed * delta[layer][j] * output[layer][i] 
 
 
 
