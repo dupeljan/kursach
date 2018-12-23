@@ -6,8 +6,11 @@ import os
 SOURCE_PATCH = "test5"
 RESULT_PATH = "noise test5"
 
-def add_noise(name):
-	k = 10#20
+def add_noise(name,k=10):
+	'''
+	Add noise in each pixel of name.png.
+	256/k - ratio of dispersion.
+	'''
 	range_ = int(512/k)
 	img = cv2.imread(os.path.join(SOURCE_PATCH ,  name + ".png"))
 
@@ -25,6 +28,7 @@ def add_noise(name):
 			img[i][j] =  rand
 	cv2.imwrite(os.path.join(RESULT_PATH , name+".png"),img)
 	print ( name+".png" + " generated")
+
 def main():
 	if not os.path.isdir(RESULT_PATH):
 		os.mkdir(RESULT_PATH)
@@ -37,5 +41,6 @@ def main():
 			count += 1
 			print("not more than " + str(len(files) - count) + " files left" )
 	print("Generate test success")
+
 if __name__ == '__main__':
 	main()

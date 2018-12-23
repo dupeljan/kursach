@@ -116,6 +116,10 @@ def circle_draw(draw_image, image, par):
 
 
 def gen_test(name,gen_n = 0):
+	'''
+	Generate Ishihara test card
+	from file name.png to name+gen_n+.png
+	'''
     image = Image.open(os.path.join(SOURCE_PATCH,name + ".png"))
     image2 = Image.new('RGB', image.size, BACKGROUND)
     draw_image = ImageDraw.Draw(image2)

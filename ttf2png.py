@@ -2,7 +2,6 @@ import sys
 import os
 import subprocess
 import random
-
 from fontTools.ttLib import TTFont
 
 RESULT_PATH = "fonts"
@@ -10,6 +9,9 @@ FONT_COUNT = 30
 BAD_FONTS = (b'cst',b'rsfs',b'lklug',b'esint',b'ani',b'cmex',b'msam',b'EagleLake')
 
 def gen_pics(TTF_PATH,FONT_SIZE = "500"):
+	'''
+	Generate png picture of digits with fonts from TTF_PATH.
+	'''
 	TTF_NAME = os.path.splitext(os.path.basename(TTF_PATH))[0]
 
 	for i in range(10):
